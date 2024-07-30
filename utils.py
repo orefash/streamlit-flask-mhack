@@ -52,7 +52,7 @@ def get_conversational_chain():
     """
 
     model = ChatGoogleGenerativeAI(model="gemini-pro",
-                             temperature=0.3, convert_system_message_to_human=True)
+                             temperature=0.5, convert_system_message_to_human=True)
 
     prompt = PromptTemplate(template = prompt_template, input_variables = ["context", "question"])
     chain = load_qa_chain(model, chain_type="stuff", prompt=prompt)
@@ -70,7 +70,9 @@ def ask_question(user_question):
         # docs = new_db.search(np.array([embeddings.encode(user_question)]), k=1)[1][0]
 
         # new_db = FAISS.load_local("faiss_index", embeddings)
-        new_db = FAISS.load_local("faiss_index", embeddings,allow_dangerous_deserialization=True)
+
+        new_db = FAISS.load_local("faiss_index", embeddings, allow_dangerous_deserialization=True)
+
         docs = new_db.similarity_search(user_question)
 
         # Generate conversational chain using user question and retrieved documents
